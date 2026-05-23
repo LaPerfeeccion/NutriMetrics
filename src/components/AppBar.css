@@ -1,0 +1,129 @@
+.app-bar {
+  margin: 0;
+  padding: 8px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  color: #084070;
+  border-bottom: 1px solid #d7e5f3;
+  box-shadow: 0 1px 18px rgba(12, 56, 109, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 72px;
+  gap: 16px;
+}
+
+.app-title{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 220px;
+}
+
+.app-title h1, .app-title h4 {
+  margin: 0;
+}
+.app-title h1{
+  font-size: 1.25rem;
+  color: #0b3940;
+  font-weight: 600;
+}
+.app-title h4{
+  color: #4b6b5a;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.search-container {
+  width: 220px;
+  display: flex;
+  align-items: center;
+  background-color: #eef4ff;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1px solid #d6e5fb;
+  transition: all 0.25s ease-in;
+  position: relative;
+}
+
+.search-container:hover {
+  box-shadow: 0 6px 20px rgba(12, 56, 109, 0.14);
+  transform: translateY(-1px);
+}
+
+.search-results {
+  position: absolute;
+  top: 55px;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+  z-index: 999;
+}
+
+.search-item {
+  padding: 12px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.search-item:hover {
+  background-color: #f3f4f6;
+}
+
+.icon {
+  color: #11508a;
+  font-size: 18px;
+  margin-right: 10px;
+}
+
+.inrp {
+  background: none;
+  border: none;
+  color: #0b3940;
+  outline: none;
+  width: 160px;
+  font-size: 0.95rem;
+}
+
+.inrp::placeholder {
+  color: #8aa194;
+}
+
+.app-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.action-icon {
+  font-size: 22px;
+  color: #146875;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.12s ease;
+}
+
+.action-icon:hover {
+  color: #08272c;
+  transform: translateY(-2px);
+}
+
+.contenedor-separador {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 56px;
+  padding: 0 8px;
+}
+
+.linea-vertical {
+  width: 1px;
+  height: 60%;
+  background-color: #e6f3e9;
+}

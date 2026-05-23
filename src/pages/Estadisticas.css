@@ -1,0 +1,79 @@
+.estadisticas-container {
+  padding: 10px;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  min-height: 100vh;
+  gap: 15px;
+}
+
+.chart-container {
+  width: 100%;
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.575);
+}
+
+.chart-container h2 {
+  margin-bottom: 20px;
+  color: #000000;
+}
+
+.estadisticas-views {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  text-align: center;
+  height: 120px;
+  background-color: rgb(114, 199, 255);
+  padding: 6.8px;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+  width: 200px;
+  height: 100px;
+  transition: all 0.3s ease;
+  background-color: rgb(12, 166, 194);
+}
+
+.stats:hover{
+  transform: translateY(-5px);
+  text-shadow: 0px 4px 12px rgb(0, 238, 255);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.stat-title {
+  grid-column-start: 1;
+  white-space: nowrap;
+  color: rgb(224, 222, 222);
+}
+
+.stat-value {
+  grid-column-start: 1;
+  white-space: nowrap;
+  font-size: 2.25rem;
+  line-height: 2.5rem;
+  font-weight: 800;
+}
+
+.stat-desc {
+  grid-column-start: 1;
+  white-space: nowrap;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  color: rgb(223, 222, 222);
+}
