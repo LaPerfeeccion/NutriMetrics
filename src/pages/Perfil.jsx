@@ -15,6 +15,8 @@ export const Perfil = () => {
   const [grado, setGrado] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [editando, setEditando] = useState(false);
+  const [nombreOriginal, setNombreOriginal] = useState('');
 
   useEffect(() => {
     const cargarPerfil = async () => {
@@ -25,6 +27,7 @@ export const Perfil = () => {
         setUser(data.user);
 
         const fullName = data.user.user_metadata?.full_name?.trim();
+        setNombreOriginal(fullName);
         if (!fullName) return;
 
         const { data: estudianteData, error: estudianteError } = await supabase
@@ -46,9 +49,49 @@ export const Perfil = () => {
         setLoading(false);
       }
     };
-
     cargarPerfil();
   }, []);
+
+  const guardarCambios = async () => {
+  try {
+    setError('');
+
+    // ACTUALIZAR TABLA ESTUDIANTE
+    const { error: estudianteError } = await supabase
+      .from('estudiante')
+      .update({
+        nombre: user.user_metadata.full_name,
+        edad,
+        peso,
+        altura,
+        grado,
+        estado_nutricional: estadoNutricional
+      })
+      .eq('nombre', nombreOriginal);
+
+    if (estudianteError) {
+      throw estudianteError;
+    }
+
+    // ACTUALIZAR AUTH USER
+    const { error: authError } = await supabase.auth.updateUser({
+      email: user.email,
+      data: {
+        full_name: user.user_metadata.full_name
+      }
+    });
+
+    if (authError) {
+      throw authError;
+    }
+
+    setNombreOriginal(user.user_metadata.full_name);
+
+    setEditando(false);
+  } catch (err) {
+    setError(err.message);
+  }
+};
 
   return (
     <div className="perfil-page">
@@ -66,9 +109,28 @@ export const Perfil = () => {
           <div className="info">
             <div className="infocont">
               <strong>Nombre</strong>
-              <span>{user.user_metadata?.full_name || 'Sin nombre'}</span>
+              {editando ? (
+                <input
+                  type="text"
+                  value={user.user_metadata?.full_name || ''}
+                  onChange={(e) =>
+                    setUser({ ...user, user_metadata: { ...user.user_metadata, full_name: e.target.value } })
+                  }
+                />
+              ) : (
+                <span>{user.user_metadata?.full_name || 'Sin nombre'}</span>
+              )}
+
               <strong>Email</strong>
-              <span>{user.email}</span>
+              {editando ? (
+                <input
+                  type="email"
+                  value={user.email || ''}
+                  onChange={(e) => setUser({ ...user, email: e.target.value })}
+                />
+              ) : (
+                <span>{user.email}</span>
+              )}
             </div>
 
             <div className="infocont">
@@ -76,39 +138,72 @@ export const Perfil = () => {
               <span>{new Date(user.created_at).toLocaleDateString()}</span>
 
               <strong>Edad</strong>
-              <span>{edad ?? 'Sin edad'}</span>
+              {editando ? (
+                <input type="number" value={edad || ''} onChange={(e) => setEdad(e.target.value)} />
+              ) : (
+                <span>{edad ?? 'Sin edad'}</span>
+              )}
             </div>
             <div className="infocont">
               <strong>Grado</strong>
-              <span>{grado || 'Sin grado'}</span>
+              {editando ? (
+                <input type="text" value={grado || ''} onChange={(e) => setGrado(e.target.value)} />
+              ) : (
+                <span>{grado || 'Sin grado'}</span>
+              )}
               <strong>Peso</strong>
-              <span>{peso ?? 'Sin peso'}</span>
+              {editando ? (
+                <input type="number" value={peso || ''} onChange={(e) => setPeso(e.target.value)} />
+              ) : (
+                <span>{peso ?? 'Sin peso'}</span>
+              )}
             </div>
             <div className="infocont">
               <strong>Altura</strong>
-              <span>{altura ?? 'Sin altura'}</span>
+              {editando ? (
+                <input type="number" value={altura || ''} onChange={(e) => setAltura(e.target.value)} />
+              ) : (
+                <span>{altura ?? 'Sin altura'}</span>
+              )}
               <strong>Estado nutricional</strong>
-              <span>{estadoNutricional || 'Sin estado nutricional'}</span>
+              {editando ? (
+                <input
+                  type="text"
+                  value={estadoNutricional || ''}
+                  onChange={(e) => setEstadoNutricional(e.target.value)}
+                />
+              ) : (
+                <span>{estadoNutricional || 'Sin estado nutricional'}</span>
+              )}
             </div>
           </div>
         ) : (
           <p>No hay sesión activa. Inicia sesión para ver tu perfil.</p>
         )}
-
-        <button
-          className="btn2"
-          onClick={async () => {
-            const { error } = await supabase.auth.signOut();
-            if (error) setError(error.message);
-            else {
-              clearStoredSchool();
-              setUser(null);
-              navigate('/login');
-            }
-          }}
-        >
-          Cerrar sesión
-        </button>
+        <div className="buttns">
+          <button
+            className="btn2"
+            onClick={async () => {
+              const { error } = await supabase.auth.signOut();
+              if (error) setError(error.message);
+              else {
+                clearStoredSchool();
+                setUser(null);
+                navigate('/login');
+              }
+            }}
+          >
+            Cerrar sesión
+          </button>
+          <button className="btn2" onClick={() => setEditando(true)}>
+            Editar perfil
+          </button>
+          {editando && (
+            <button className="btn2" onClick={guardarCambios}>
+              Guardar cambios
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
