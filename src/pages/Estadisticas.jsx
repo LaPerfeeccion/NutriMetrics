@@ -127,7 +127,7 @@ export const Estadisticas = () => {
               <XAxis dataKey="day" />
               <YAxis className="sta" tick={{ fill: '#0691aa', fontSize: 14 }} />
               <Tooltip />
-              <Bar dataKey="comidas" radius={[20, 20, 0, 0]} fill="#0f766e" />
+              <Bar dataKey="comidas" radius={[20, 20, 0, 0]} fill="#23bbd6" />
             </BarChart>
           </ResponsiveContainer>
         )}

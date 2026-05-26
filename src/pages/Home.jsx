@@ -3,19 +3,20 @@ import { AppBar } from '../components/AppBar';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { readStoredSchool } from '../lib/schoolSelection';
 
 export const Home = () => {
   const navigate = useNavigate();
   const [summary, setSummary] = useState({
     comidas: 0,
     estudiantes: 0,
-    colegios: 0,
     calorias: 0,
     proteinas: 0,
     carbohidratos: 0,
     grasas: 0,
     estado: 'Preparando datos...'
   });
+  const [schoolName, setSchoolName] = useState('Sin colegio asignado');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -25,10 +26,50 @@ export const Home = () => {
         setLoading(true);
         setError('');
 
-        const [consumoResponse, estudiantes, colegios] = await Promise.all([
+        const storedSchool = readStoredSchool();
+        let currentSchool = storedSchool?.nombre || 'Sin colegio asignado';
+
+        if (!storedSchool?.nombre) {
+          const { data: userData, error: userError } = await supabase.auth.getUser();
+
+          if (userError) {
+            throw userError;
+          }
+
+          const fullName = userData.user?.user_metadata?.full_name?.trim() || '';
+
+          if (fullName) {
+            const { data: estudianteData, error: estudianteError } = await supabase
+              .from('estudiante')
+              .select('id_colegio')
+              .eq('nombre', fullName)
+              .maybeSingle();
+
+            if (estudianteError) {
+              throw estudianteError;
+            }
+
+            if (estudianteData?.id_colegio) {
+              const { data: colegioData, error: colegioError } = await supabase
+                .from('colegio')
+                .select('nombre')
+                .eq('id_colegio', estudianteData.id_colegio)
+                .maybeSingle();
+
+              if (colegioError) {
+                throw colegioError;
+              }
+
+              if (colegioData?.nombre) {
+                currentSchool = colegioData.nombre;
+              }
+            }
+          }
+        }
+
+        const [consumoResponse, estudiantes] = await Promise.all([
           supabase.from('consumo').select('plato:plato(calorias, proteinas, carbohidratos, grasas)'),
-          supabase.from('estudiante').select('*', { count: 'exact', head: true }),
-          supabase.from('colegio').select('*', { count: 'exact', head: true })
+          supabase.from('estudiante').select('*', { count: 'exact', head: true })
         ]);
 
         if (consumoResponse.error) {
@@ -37,10 +78,6 @@ export const Home = () => {
 
         if (estudiantes.error) {
           throw estudiantes.error;
-        }
-
-        if (colegios.error) {
-          throw colegios.error;
         }
 
         const nutritionalTotals = (consumoResponse.data ?? []).reduce(
@@ -61,10 +98,10 @@ export const Home = () => {
           { calorias: 0, proteinas: 0, carbohidratos: 0, grasas: 0 }
         );
 
+        setSchoolName(currentSchool);
         setSummary({
           comidas: consumoResponse.data?.length ?? 0,
           estudiantes: estudiantes.count ?? 0,
-          colegios: colegios.count ?? 0,
           calorias: nutritionalTotals.calorias,
           proteinas: nutritionalTotals.proteinas,
           carbohidratos: nutritionalTotals.carbohidratos,
@@ -73,10 +110,10 @@ export const Home = () => {
         });
       } catch (err) {
         setError(err.message || 'No fue posible cargar los datos básicos de la app');
+        setSchoolName('Sin colegio asignado');
         setSummary({
           comidas: 0,
           estudiantes: 0,
-          colegios: 0,
           calorias: 0,
           proteinas: 0,
           carbohidratos: 0,
@@ -114,8 +151,8 @@ export const Home = () => {
               <p>{loading ? '...' : summary.estudiantes.toLocaleString()}</p>
             </div>
             <div className="card">
-              <h3>Colegios registrados</h3>
-              <p>{loading ? '...' : summary.colegios.toLocaleString()}</p>
+              <h3>Mi colegio</h3>
+              <p>{loading ? '...' : schoolName}</p>
             </div>
             <div className="card">
               <h3>Calorías totales registradas</h3>

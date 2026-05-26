@@ -106,7 +106,7 @@ export const Registrarse = () => {
   };
 
   return (
-    <div className="regiter_body">
+    <div className="register_body">
       <AppBar />
       <div className="registrarse">
         <div className="card_estudiantes">
@@ -163,12 +163,14 @@ export const Registrarse = () => {
 
             <div className="inputForm">
               <label htmlFor="grado">Grado</label>
-              <select id="grado" name="grado" value={form.grado} onChange={handleChange} required>
-                <option value="6A">6A</option>
-                <option value="7B">7B</option>
-                <option value="8A">8A</option>
-                <option value="9B">9B</option>
-              </select>
+              <input
+                type="text"
+                id="grado"
+                name="grado"
+                value={form.grado}
+                onChange={handleChange}
+                placeholder="Ej. 6A, 10B"
+              />
             </div>
 
             <div className="inputForm">
@@ -190,13 +192,21 @@ export const Registrarse = () => {
 
             <div className="inputForm">
               <label htmlFor="altura">Altura (m)</label>
-              <input type="number" id="altura" name="altura" min="0.1" step="0.01" value={form.altura} onChange={handleChange} />
+              <input
+                type="number"
+                id="altura"
+                name="altura"
+                min="0.1"
+                step="0.01"
+                value={form.altura}
+                onChange={handleChange}
+              />
             </div>
 
             <div className="inputForm">
               <label htmlFor="id_colegio">Colegio</label>
-              <select id="id_colegio" name="id_colegio" value={form.id_colegio} onChange={handleChange}>
-                <option value="">Selecciona un colegio (opcional)</option>
+              <select id="id_colegio" name="id_colegio" value={form.id_colegio} onChange={handleChange} required>
+                <option value="">Selecciona tu colegio</option>
                 {colegios.map((colegio) => (
                   <option key={colegio.id_colegio} value={colegio.id_colegio}>
                     {colegio.nombre}

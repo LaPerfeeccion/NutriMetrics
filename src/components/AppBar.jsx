@@ -1,13 +1,79 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './AppBar.css';
 import { FaMagnifyingGlass, FaBell } from 'react-icons/fa6';
 import { FaUserCircle } from 'react-icons/fa';
 import { AiFillHome } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import { readStoredSchool } from '../lib/schoolSelection';
 
 export const AppBar = () => {
   const navigate = useNavigate();
   const [search, setSearch] = useState('');
+  const [schoolName, setSchoolName] = useState('');
+
+  useEffect(() => {
+    const cargarNombreColegio = async () => {
+      const storedSchool = readStoredSchool();
+
+      if (storedSchool?.nombre) {
+        setSchoolName(storedSchool.nombre);
+        return;
+      }
+
+      try {
+        const { data: userData, error: userError } = await supabase.auth.getUser();
+
+        if (userError || !userData.user) {
+          setSchoolName('');
+          return;
+        }
+
+        const fullName = userData.user.user_metadata?.full_name?.trim();
+
+        if (!fullName) {
+          setSchoolName('');
+          return;
+        }
+
+        const { data: estudianteData, error: estudianteError } = await supabase
+          .from('estudiante')
+          .select('id_colegio')
+          .eq('nombre', fullName)
+          .maybeSingle();
+
+        if (estudianteError) {
+          throw estudianteError;
+        }
+
+        if (!estudianteData?.id_colegio) {
+          setSchoolName('');
+          return;
+        }
+
+        const { data: colegioData, error: colegioError } = await supabase
+          .from('colegio')
+          .select('nombre')
+          .eq('id_colegio', estudianteData.id_colegio)
+          .maybeSingle();
+
+        if (colegioError) {
+          throw colegioError;
+        }
+
+        if (colegioData?.nombre) {
+          setSchoolName(colegioData.nombre);
+          return;
+        }
+
+        setSchoolName('');
+      } catch {
+        setSchoolName('');
+      }
+    };
+
+    cargarNombreColegio();
+  }, []);
 
   const pages = [
     { name: 'Home', path: '/' },
@@ -23,7 +89,7 @@ export const AppBar = () => {
     <div className="app-bar">
       <section className="app-title">
         <h1>NutriMetrics</h1>
-        <h4>Seguimiento escolar</h4>
+        <h4>{schoolName || 'Seguimiento escolar'}</h4>
       </section>
 
       <div className="contenedor-separador">
@@ -65,7 +131,6 @@ export const AppBar = () => {
 
       <section className="app-actions">
         <AiFillHome className="action-icon" onClick={() => navigate('/')} />
-        <FaBell className="action-icon" />
         <FaUserCircle className="action-icon" onClick={() => navigate('/perfil')} />
       </section>
     </div>

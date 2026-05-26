@@ -1,0 +1,27 @@
+.footer {
+  align-items: center;
+  background-color: #ffffff;
+  color: #1b1b1b;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  z-index: 1000;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  box-sizing: border-box;
+  border-top: 3px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.proveedor {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 4%;
+  align-items: center;
+  text-align: center;
+  color: #111;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.4;
+}

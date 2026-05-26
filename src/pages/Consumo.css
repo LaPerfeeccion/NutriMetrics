@@ -2,19 +2,44 @@
   margin: 0;
 }
 
+.generalConsumo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  gap: 40px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.918);
+  padding: 24px;
+  border-radius: 24px;
+}
+
+.prs{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.r2{
+  text-align: center;
+}
+
+.bgr{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  border: 1.5px solid rgba(255, 255, 255, 0.63);
+}
+
 .principalConsumo {
   padding: 40px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(
-    180deg,
-    rgba(111, 193, 255, 0.9) 0%,
-    rgba(255, 255, 255, 0.95) 24%,
-    rgba(255, 255, 255, 0.98) 55%,
-    #ffffff 100%
-  );
+  background: #ffffff;
+  background: linear-gradient(358deg, rgba(255, 255, 255, 1) 0%, rgb(146, 205, 216) 35%, rgba(0, 181, 217, 1) 100%);
   position: relative;
   overflow: hidden;
   width: auto;
@@ -72,9 +97,8 @@ search {
   transition: all 0.5s ease;
 }
 
-.card_estudiantes:hover{
-  background-color: rgb(170, 236, 228);
-  box-shadow: 0px 15px 40px rgb(255, 255, 255);
+.card_estudiantes:hover {
+  box-shadow: 0px 15px 40px #c5fffa;
 }
 
 .card_estudiantes h1 {
@@ -140,5 +164,5 @@ search {
 .btn:hover {
   transform: translateY(-3px);
   box-shadow: 0px 10px 22px rgba(12, 166, 194, 0.3);
-  background:  #f7f7f7;
+  background: #f7f7f7;
 }

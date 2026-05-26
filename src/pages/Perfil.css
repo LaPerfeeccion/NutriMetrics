@@ -1,0 +1,115 @@
+.perfil-container {
+  position: relative;
+  width: min(100%, 640px);
+  margin: 2rem auto;
+  padding: 2rem 1.5rem 1.5rem;
+  min-height: 320px;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 1rem;
+  box-shadow:
+    20px 20px 60px #bebebe,
+    -20px -20px 60px #ffffff;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(240, 248, 255, 0.97));
+}
+
+.perfil-page {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(358deg, rgba(255, 255, 255, 1) 0%, rgb(146, 205, 216) 35%, rgba(0, 181, 217, 1) 100%);
+}
+
+.perfil-title {
+  position: relative;
+  z-index: 3;
+  font-size: 2rem;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: #0f172a;
+}
+
+.info {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+  background-color: rgba(255, 255, 255, 0.98);
+  padding: 1rem 1.2rem;
+  border-radius: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  color: #0f172a;
+}
+
+.btn2 {
+  position: relative;
+  z-index: 3;
+  align-self: flex-start;
+  background-color: #0f172a;
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.bg {
+  position: absolute;
+  inset: 12px;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(18px);
+  border-radius: 18px;
+  outline: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.blob {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #63d4ff, #0099e5 65%, #0068a6);
+  opacity: 0.8;
+  filter: blur(12px);
+  animation: blob-bounce 6s infinite ease;
+}
+
+@keyframes blob-bounce {
+  0% {
+    transform: translate(-50%, -50%) translate3d(0, 0, 0);
+  }
+
+  25% {
+    transform: translate(-50%, -50%) translate3d(45px, -20px, 0);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translate3d(0, 35px, 0);
+  }
+
+  75% {
+    transform: translate(-50%, -50%) translate3d(-35px, 0, 0);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) translate3d(0, 0, 0);
+  }
+}
+
+.infocont{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-direction: row;
+}
