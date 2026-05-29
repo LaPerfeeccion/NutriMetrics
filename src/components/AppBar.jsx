@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import './AppBar.css';
-import { FaMagnifyingGlass, FaBell } from 'react-icons/fa6';
+import { FaMagnifyingGlass } from 'react-icons/fa6';
 import { FaUserCircle } from 'react-icons/fa';
 import { AiFillHome } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
@@ -9,8 +9,10 @@ import { readStoredSchool } from '../lib/schoolSelection';
 
 export const AppBar = () => {
   const navigate = useNavigate();
+
   const [search, setSearch] = useState('');
   const [schoolName, setSchoolName] = useState('');
+  const [selectedPage, setSelectedPage] = useState('');
 
   useEffect(() => {
     const cargarNombreColegio = async () => {
@@ -22,25 +24,28 @@ export const AppBar = () => {
       }
 
       try {
-        const { data: userData, error: userError } = await supabase.auth.getUser();
+        const { data: userData, error: userError } =
+          await supabase.auth.getUser();
 
         if (userError || !userData.user) {
           setSchoolName('');
           return;
         }
 
-        const fullName = userData.user.user_metadata?.full_name?.trim();
+        const fullName =
+          userData.user.user_metadata?.full_name?.trim();
 
         if (!fullName) {
           setSchoolName('');
           return;
         }
 
-        const { data: estudianteData, error: estudianteError } = await supabase
-          .from('estudiante')
-          .select('id_colegio')
-          .eq('nombre', fullName)
-          .maybeSingle();
+        const { data: estudianteData, error: estudianteError } =
+          await supabase
+            .from('estudiante')
+            .select('id_colegio')
+            .eq('nombre', fullName)
+            .maybeSingle();
 
         if (estudianteError) {
           throw estudianteError;
@@ -51,22 +56,18 @@ export const AppBar = () => {
           return;
         }
 
-        const { data: colegioData, error: colegioError } = await supabase
-          .from('colegio')
-          .select('nombre')
-          .eq('id_colegio', estudianteData.id_colegio)
-          .maybeSingle();
+        const { data: colegioData, error: colegioError } =
+          await supabase
+            .from('colegio')
+            .select('nombre')
+            .eq('id_colegio', estudianteData.id_colegio)
+            .maybeSingle();
 
         if (colegioError) {
           throw colegioError;
         }
 
-        if (colegioData?.nombre) {
-          setSchoolName(colegioData.nombre);
-          return;
-        }
-
-        setSchoolName('');
+        setSchoolName(colegioData?.nombre || '');
       } catch {
         setSchoolName('');
       }
@@ -79,11 +80,14 @@ export const AppBar = () => {
     { name: 'Home', path: '/' },
     { name: 'Estadísticas', path: '/estadisticas' },
     { name: 'Consumo', path: '/consumo' },
+    { name: 'Perfil', path: '/perfil' },
     { name: 'Registrarse', path: '/registrarse' },
     { name: 'Login', path: '/login' }
   ];
 
-  const filteredPages = pages.filter((page) => page.name.toLowerCase().includes(search.toLowerCase()));
+  const filteredPages = pages.filter((page) =>
+    page.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="app-bar">
@@ -95,6 +99,8 @@ export const AppBar = () => {
       <div className="contenedor-separador">
         <div className="linea-vertical"></div>
       </div>
+
+      {/* SEARCH */}
 
       <div role="search" className="search-container">
         <FaMagnifyingGlass className="icon" />
@@ -129,9 +135,42 @@ export const AppBar = () => {
         <div className="linea-vertical"></div>
       </div>
 
+      {/* SELECT */}
+
+      <select
+        className="page-select"
+        value={selectedPage}
+        onChange={(e) => {
+          setSelectedPage(e.target.value);
+
+          if (e.target.value) {
+            navigate(e.target.value);
+          }
+        }}
+      >
+        <option value="">Ir a...</option>
+
+        {pages.map((page) => (
+          <option key={page.path} value={page.path}>
+            {page.name}
+          </option>
+        ))}
+      </select>
+
+      <div className="contenedor-separador">
+        <div className="linea-vertical"></div>
+      </div>
+
       <section className="app-actions">
-        <AiFillHome className="action-icon" onClick={() => navigate('/')} />
-        <FaUserCircle className="action-icon" onClick={() => navigate('/perfil')} />
+        <AiFillHome
+          className="action-icon"
+          onClick={() => navigate('/')}
+        />
+
+        <FaUserCircle
+          className="action-icon"
+          onClick={() => navigate('/perfil')}
+        />
       </section>
     </div>
   );

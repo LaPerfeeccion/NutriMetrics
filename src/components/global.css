@@ -1,0 +1,56 @@
+/* App.css */
+
+.progress-bar-global {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    #00f0ff,
+    #7b2cff,
+    #ff00c8
+  );
+  transform-origin: 0%;
+  z-index: 99999;
+  box-shadow: 0 0 20px #00f0ff;
+}
+
+.mouse-aura {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 240, 255, 0.25),
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(20px);
+  mix-blend-mode: screen;
+}
+
+.cyber-grid {
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+
+  background-size: 40px 40px;
+  z-index: -2;
+
+  mask-image: radial-gradient(circle at center, black 30%, transparent 90%);
+}
+
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 999;
+}

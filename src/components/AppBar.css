@@ -127,3 +127,29 @@
   height: 60%;
   background-color: #e6f3e9;
 }
+
+.page-select {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgb(134, 134, 134);
+
+  padding: 0.6rem 1rem;
+
+  border-radius: 12px;
+
+  outline: none;
+
+  backdrop-filter: blur(10px);
+
+  transition: 0.3s;
+}
+
+.page-select:hover {
+  border-color: #2cabff;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.4);
+}
+
+.page-select option {
+  background: #017780;
+  color: white;
+}
